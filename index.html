@@ -1,0 +1,346 @@
+<html><head><base href="https://futbol-tactica.websim.ai" />
+<title>Táctica de Fútbol FC Barcelona - Diseña tu Estrategia</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  .container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+  }
+  .player-list {
+    width: 25%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: #004D98; /* Azul oscuro del FC Barcelona */
+    padding: 10px;
+    box-sizing: border-box;
+    color: white;
+    position: relative;
+  }
+  .player-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  .player-item:hover {
+    background-color: #A50044; /* Granate del FC Barcelona */
+  }
+  .player-icon-small {
+    width: 30px;
+    height: 30px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23ffffff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 10px;
+  }
+  .field-container {
+    width: 75%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a472a;
+  }
+  .field {
+    width: 75vh;
+    height: 100vh;
+    max-width: 90%;
+    max-height: 90%;
+    background-color: #4CAF50;
+    position: relative;
+    overflow: visible;
+    border: 2px solid white;
+    box-sizing: border-box;
+  }
+  .line {
+    position: absolute;
+    background-color: white;
+  }
+  .center-circle {
+    width: 20%;
+    height: 15%;
+    border: 2px solid white;
+    border-radius: 50%;
+    position: absolute;
+    top: 42.5%;
+    left: 40%;
+  }
+  .penalty-area {
+    width: 60%;
+    height: 20%;
+    border: 2px solid white;
+    position: absolute;
+    left: 20%;
+  }
+  .goal-area {
+    width: 26%;
+    height: 8%;
+    border: 2px solid white;
+    position: absolute;
+    left: 37%;
+  }
+  .player {
+    width: 14vh;
+    height: 16vh;
+    max-width: 16vw;
+    max-height: 20vw;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+  }
+  .player-icon {
+    width: 10vh;
+    height: 10vh;
+    max-width: 12vw;
+    max-height: 12vw;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23004D98;stop-opacity:1" /><stop offset="100%" style="stop-color:%23A50044;stop-opacity:1" /></linearGradient></defs><path fill="url(%23grad)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .player-info {
+    color: white;
+    font-weight: bold;
+    font-size: 2.5vh;
+    text-align: center;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+    margin-top: 0.5vh;
+    line-height: 1.2;
+  }
+  .selected {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5);
+  }
+  .info-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background-color: #A50044;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+  }
+  .info-tooltip {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    background-color: #A50044;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px;
+    display: none;
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="player-list" id="playerList">
+    <!-- Player list will be populated here -->
+    <div class="info-icon" id="infoIcon">i</div>
+    <div class="info-tooltip" id="infoTooltip">
+      Haga click en su jugador para añadirlo al campo. Haga doble click para eliminarlo del campo.
+    </div>
+  </div>
+  <div class="field-container">
+    <div class="field" id="field">
+      <div class="line" style="width: 100%; height: 2px; top: 50%;"></div>
+      <div class="center-circle"></div>
+      <div class="penalty-area" style="top: 0;"></div>
+      <div class="penalty-area" style="bottom: 0;"></div>
+      <div class="goal-area" style="top: 0;"></div>
+      <div class="goal-area" style="bottom: 0;"></div>
+      <div class="line" style="width: 2px; height: 100%; left: 0;"></div>
+      <div class="line" style="width: 2px; height: 100%; right: 0;"></div>
+      <div class="line" style="width: 100%; height: 2px; top: 0;"></div>
+      <div class="line" style="width: 100%; height: 2px; bottom: 0;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedPlayer = null;
+let isDragging = false;
+let offsetX, offsetY;
+
+const barcelonaPlayers = [
+  {name: "Ter Stegen"},
+  {name: "Alejandro Balde"},
+  {name: "Ronald Araujo"},
+  {name: "Iñigo Martínez"},
+  {name: "Gavi"},
+  {name: "Pedri"},
+  {name: "Robert Lewandowski"},
+  {name: "Ansu Fati"},
+  {name: "Raphinha"},
+  {name: "Andreas Christensen"},
+  {name: "Fermín López"},
+  {name: "Marcos Alonso"},
+  {name: "Oriol Romeu"},
+  {name: "Frenkie de Jong"},
+  {name: "Iñaki Peña"},
+  {name: "Jules Koundé"},
+  {name: "Lamine Yamal"},
+  {name: "Ander Astralaga"},
+  {name: "Marc Casadó"},
+  {name: "Pau Cubarsí"},
+  {name: "Víctor Barberá"},
+  {name: "Kimmich"},
+  {name: "Nico Williams"},
+  {name: "Ilkay Gündogan"}
+];
+
+function populatePlayerList() {
+  const playerList = document.getElementById('playerList');
+  barcelonaPlayers.forEach(player => {
+    const playerItem = document.createElement('div');
+    playerItem.className = 'player-item';
+    playerItem.innerHTML = `
+      <div class="player-icon-small"></div>
+      <span>${player.name}</span>
+    `;
+    playerItem.addEventListener('click', () => addPlayerToField(player));
+    playerList.appendChild(playerItem);
+  });
+}
+
+function addPlayerToField(player) {
+  const field = document.getElementById('field');
+  const playerElement = document.createElement('div');
+  playerElement.className = 'player';
+  playerElement.innerHTML = `
+    <div class="player-icon"></div>
+    <div class="player-info">${player.name}</div>
+  `;
+  playerElement.style.left = '50%';
+  playerElement.style.top = '50%';
+
+  playerElement.addEventListener('mousedown', startDragging);
+  playerElement.addEventListener('touchstart', startDragging);
+  playerElement.addEventListener('dblclick', removePlayer);
+
+  field.appendChild(playerElement);
+}
+
+function startDragging(e) {
+  e.preventDefault();
+  selectedPlayer = e.currentTarget;
+  isDragging = true;
+  
+  const rect = selectedPlayer.getBoundingClientRect();
+
+  if (e.type === 'mousedown') {
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', stopDragging);
+  } else if (e.type === 'touchstart') {
+    offsetX = e.touches[0].clientX - rect.left;
+    offsetY = e.touches[0].clientY - rect.top;
+    document.addEventListener('touchmove', drag);
+    document.addEventListener('touchend', stopDragging);
+  }
+}
+
+function drag(e) {
+  if (!isDragging) return;
+  e.preventDefault();
+
+  const field = document.getElementById('field');
+  const fieldRect = field.getBoundingClientRect();
+  
+  let clientX, clientY;
+  if (e.type === 'mousemove') {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  } else if (e.type === 'touchmove') {
+    clientX = e.touches[0].clientX;
+    clientY = e.touches[0].clientY;
+  }
+
+  let left = (clientX - fieldRect.left - offsetX) / fieldRect.width * 100;
+  let top = (clientY - fieldRect.top - offsetY) / fieldRect.height * 100;
+  
+  left = Math.max(0, Math.min(left, 100 - selectedPlayer.offsetWidth / fieldRect.width * 100));
+  top = Math.max(0, Math.min(top, 100 - selectedPlayer.offsetHeight / fieldRect.height * 100));
+
+  selectedPlayer.style.left = left + '%';
+  selectedPlayer.style.top = top + '%';
+}
+
+function stopDragging() {
+  isDragging = false;
+  document.removeEventListener('mousemove', drag);
+  document.removeEventListener('mouseup', stopDragging);
+  document.removeEventListener('touchmove', drag);
+  document.removeEventListener('touchend', stopDragging);
+}
+
+function removePlayer(e) {
+  e.currentTarget.remove();
+}
+
+document.addEventListener('touchmove', function(e) {
+  if (isDragging) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+function adjustFieldSize() {
+  const field = document.getElementById('field');
+  const container = document.querySelector('.field-container');
+  const aspectRatio = 3 / 4;
+
+  let width = container.clientWidth;
+  let height = container.clientHeight;
+
+  if (width / height > aspectRatio) {
+    field.style.height = height + 'px';
+    field.style.width = (height * aspectRatio) + 'px';
+  } else {
+    field.style.width = width + 'px';
+    field.style.height = (width / aspectRatio) + 'px';
+  }
+}
+
+// Funcionalidad del icono de información
+const infoIcon = document.getElementById('infoIcon');
+const infoTooltip = document.getElementById('infoTooltip');
+
+infoIcon.addEventListener('click', () => {
+  infoTooltip.style.display = infoTooltip.style.display === 'none' ? 'block' : 'none';
+});
+
+window.addEventListener('load', () => {
+  adjustFieldSize();
+  populatePlayerList();
+});
+window.addEventListener('resize', adjustFieldSize);
+</script>
+</body></html>
