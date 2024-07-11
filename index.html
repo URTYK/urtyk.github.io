@@ -1,4 +1,4 @@
-<html><head><base href="https://futbol-tactica.websim.ai" />
+<html><head><base href="https://futbol-tactica.websim.ai/" />
 <title>Táctica de Fútbol FC Barcelona - Diseña tu Estrategia</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,6 +71,15 @@
   }
   .new-player-form button:hover {
     background-color: #8B003A;
+  }
+  .without-icon-checkbox {
+    margin-bottom: 10px;
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+  .without-icon-checkbox input {
+    margin-left: 10px;
   }
   .field-container {
     width: 75%;
@@ -163,7 +172,10 @@
     text-align: center;
     text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
     margin-bottom: 0.4vh;
-    line-height: 1.1.
+    line-height: 1.1;
+  }
+  .player-info-large {
+    font-size: 4vh;
   }
   .remove-player {
     display: none;
@@ -220,6 +232,7 @@
     <div class="new-player-form">
       <input type="text" id="newPlayerName" maxlength="15" placeholder="Nombre del jugador">
       <input type="number" id="newPlayerNumber" min="1" max="99" placeholder="Número del jugador">
+      <label class="without-icon-checkbox">Añadir sin icono <input type="checkbox" id="addWithoutIcon"></label>
       <button id="addNewPlayerButton">Añadir Jugador</button>
     </div>
   </div>
@@ -290,7 +303,10 @@ function populatePlayerList() {
       <div class="player-number-small">${player.number}</div>
       <span>${player.name}</span>
     `;
-    playerItem.addEventListener('click', () => addPlayerToField(player));
+    playerItem.addEventListener('click', () => {
+      const withoutIcon = document.getElementById('addWithoutIcon').checked;
+      addPlayerToField(player, withoutIcon);
+    });
     playerList.appendChild(playerItem);
   });
 
@@ -300,6 +316,7 @@ function populatePlayerList() {
 function addNewPlayer() {
   const nameInput = document.getElementById('newPlayerName');
   const numberInput = document.getElementById('newPlayerNumber');
+  const withoutIcon = document.getElementById('addWithoutIcon').checked;
   const player = {
     name: nameInput.value,
     number: parseInt(numberInput.value)
@@ -314,7 +331,7 @@ function addNewPlayer() {
       <div class="player-number-small">${player.number}</div>
       <span>${player.name}</span>
     `;
-    playerItem.addEventListener('click', () => addPlayerToField(player));
+    playerItem.addEventListener('click', () => addPlayerToField(player, withoutIcon));
     document.getElementById('playerList').appendChild(playerItem);
 
     nameInput.value = '';
@@ -324,24 +341,30 @@ function addNewPlayer() {
   }
 }
 
-function addPlayerToField(player) {
+function addPlayerToField(player, withoutIcon) {
   const field = document.getElementById('field');
   const playersOnField = field.getElementsByClassName('player').length;
 
-  if (playersOnField >= maxPlayers) {
-    showError("Solo se permiten 11 jugadores en el campo.");
-    return;
-  }
-
   const playerElement = document.createElement('div');
   playerElement.className = 'player';
-  playerElement.innerHTML = `
-    <div class="player-info">${player.name}</div>
-    <div class="player-number">${player.number}</div>
-    <div class="remove-player">X</div>
-  `;
-  playerElement.style.left = '50%';
-  playerElement.style.top = '50%';
+
+  if (withoutIcon) {
+    playerElement.innerHTML = `<div class="player-info player-info-large">${player.name}</div>`;
+  } else {
+    playerElement.innerHTML = `
+      <div class="player-info">${player.name}</div>
+      <div class="player-number">${player.number}</div>
+      <div class="remove-player">X</div>
+    `;
+  }
+
+  if (playersOnField < maxPlayers) {
+    playerElement.style.left = '50%';
+    playerElement.style.top = '50%';
+  } else {
+    playerElement.style.left = '105%'; // Position outside the right edge of the field
+    playerElement.style.top = `${(playersOnField - maxPlayers) * 10}%`; // Stagger subsequent players
+  }
 
   playerElement.addEventListener('mousedown', startDragging);
   playerElement.addEventListener('touchstart', startDragging);
@@ -349,6 +372,7 @@ function addPlayerToField(player) {
 
   field.appendChild(playerElement);
 }
+
 
 function startDragging(e) {
   if (isRemoveMode) return;
@@ -390,9 +414,6 @@ function drag(e) {
   let left = (clientX - fieldRect.left - offsetX) / fieldRect.width * 100;
   let top = (clientY - fieldRect.top - offsetY) / fieldRect.height * 100;
   
-  left = Math.max(0, Math.min(left, 100 - selectedPlayer.offsetWidth / fieldRect.width * 100));
-  top = Math.max(0, Math.min(top, 100 - selectedPlayer.offsetHeight / fieldRect.height * 100));
-
   selectedPlayer.style.left = left + '%';
   selectedPlayer.style.top = top + '%';
 }
