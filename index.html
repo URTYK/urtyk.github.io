@@ -23,6 +23,7 @@
     padding: 10px;
     box-sizing: border-box;
     color: white;
+    position: relative;
   }
   .player-item {
     display: flex;
@@ -49,6 +50,27 @@
     color: white;
     margin-right: 8px;
     font-size: 12px;
+  }
+  .new-player-form {
+    margin-bottom: 20px;
+  }
+  .new-player-form input, .new-player-form button {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: none;
+    font-size: 14px;
+  }
+  .new-player-form button {
+    background-color: #A50044;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .new-player-form button:hover {
+    background-color: #8B003A;
   }
   .field-container {
     width: 75%;
@@ -141,7 +163,7 @@
     text-align: center;
     text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
     margin-bottom: 0.4vh;
-    line-height: 1.1;
+    line-height: 1.1.
   }
   .remove-player {
     display: none;
@@ -172,13 +194,36 @@
   .remove-mode .player:hover {
     opacity: 0.7;
   }
+  .error-message {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    display: none;
+    animation: fadeOut 4s both;
+  }
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+  }
 </style>
 </head>
 <body>
+
 <div class="container">
   <div class="player-list" id="playerList">
-    <!-- Player list will be populated here -->
+    <div class="new-player-form">
+      <input type="text" id="newPlayerName" maxlength="15" placeholder="Nombre del jugador">
+      <input type="number" id="newPlayerNumber" min="1" max="99" placeholder="Número del jugador">
+      <button id="addNewPlayerButton">Añadir Jugador</button>
+    </div>
   </div>
+
   <div class="field-container">
     <div class="field-title">Mi 11 del FCB</div>
     <div class="field" id="field">
@@ -198,6 +243,7 @@
       <button id="clearField" class="control-button">Limpiar Campo</button>
       <button id="downloadField" class="control-button">Descargar Imagen</button>
     </div>
+    <div id="errorMessage" class="error-message"></div>
   </div>
 </div>
 
@@ -206,6 +252,7 @@ let selectedPlayer = null;
 let isDragging = false;
 let offsetX, offsetY;
 let isRemoveMode = false;
+const maxPlayers = 11;
 
 const barcelonaPlayers = [
   {name: "Stegen", number: 1},
@@ -246,10 +293,46 @@ function populatePlayerList() {
     playerItem.addEventListener('click', () => addPlayerToField(player));
     playerList.appendChild(playerItem);
   });
+
+  document.getElementById('addNewPlayerButton').addEventListener('click', addNewPlayer);
+}
+
+function addNewPlayer() {
+  const nameInput = document.getElementById('newPlayerName');
+  const numberInput = document.getElementById('newPlayerNumber');
+  const player = {
+    name: nameInput.value,
+    number: parseInt(numberInput.value)
+  };
+
+  if (player.name && player.number) {
+    barcelonaPlayers.push(player);
+
+    const playerItem = document.createElement('div');
+    playerItem.className = 'player-item';
+    playerItem.innerHTML = `
+      <div class="player-number-small">${player.number}</div>
+      <span>${player.name}</span>
+    `;
+    playerItem.addEventListener('click', () => addPlayerToField(player));
+    document.getElementById('playerList').appendChild(playerItem);
+
+    nameInput.value = '';
+    numberInput.value = '';
+  } else {
+    showError('Por favor ingrese un nombre y un número válido.');
+  }
 }
 
 function addPlayerToField(player) {
   const field = document.getElementById('field');
+  const playersOnField = field.getElementsByClassName('player').length;
+
+  if (playersOnField >= maxPlayers) {
+    showError("Solo se permiten 11 jugadores en el campo.");
+    return;
+  }
+
   const playerElement = document.createElement('div');
   playerElement.className = 'player';
   playerElement.innerHTML = `
@@ -333,6 +416,15 @@ function removePlayer(player) {
   if (selectedPlayer === player) {
     selectedPlayer = null;
   }
+}
+
+function showError(message) {
+  const errorMessage = document.getElementById('errorMessage');
+  errorMessage.textContent = message;
+  errorMessage.style.display = 'block';
+  setTimeout(() => {
+    errorMessage.style.display = 'none';
+  }, 4000);
 }
 
 function toggleRemoveMode() {
