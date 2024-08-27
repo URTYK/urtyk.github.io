@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Conocimientos sobre las Normas de Elaboración de Presupuestos de Clubes y SADs de LaLiga</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        #quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #results {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Evaluación de Conocimientos sobre las Normas de Elaboración de Presupuestos de Clubes y SADs de LaLiga</h1>
+        <div id="questions">
+            </div>
+        <button onclick="checkAnswers()">Enviar Respuestas</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿Cuál es el objetivo principal de las Normas de Elaboración de Presupuestos de Clubes y SADs?",
+                options: [
+                    "Asegurar la transparencia financiera de los clubes y SADs.",
+                    "Establecer las reglas para la elaboración de los presupuestos de los clubes y SADs.",
+                    "Controlar los ingresos y gastos de los clubes y SADs.",
+                    "Todas las anteriores."
+                ],
+                answer: 3
+            },
+            {
+                question: "¿A qué entidades se aplican estas normas?",
+                options: [
+                    "Solo a los clubes de Primera División.",
+                    "Solo a los clubes de Segunda División.",
+                    "A todos los clubes y SADs afiliados a LaLiga, independientemente de la categoría.",
+                    "Solo a los clubes y SADs que hayan ascendido de categoría no profesional."
+                ],
+                answer: 2
+            },
+            {
+                question: "¿Cuál es el plazo general de presentación de los Presupuestos Liga?",
+                options: [
+                    "31 de diciembre de la Temporada T-1.",
+                    "30 de abril de la Temporada T-1.",
+                    "31 de marzo de la Temporada T.",
+                    "15 de julio de la Temporada T."
+                ],
+                answer: 1 
+            },
+            {
+                question: "¿Qué documentos deben acompañar a los Presupuestos Liga?",
+                options: [
+                    "Memoria Explicativa y Declaración Responsable.",
+                    "Información Complementaria.",
+                    "Estados Financieros Auditados.",
+                    "Todas las anteriores."
+                ],
+                answer: 3
+            },
+            {
+                question: "¿Cuál es el órgano competente para la aceptación y validación de los Presupuestos Liga?",
+                options: [
+                    "El Comité de Control Económico.",
+                    "El Órgano de Validación de Presupuestos de LaLiga.",
+                    "La Comisión Delegada de LaLiga.",
+                    "El Presidente de LaLiga."
+                ],
+                answer: 1
+            },
+            {
+                question: "¿Qué se entiende por 'Coste de Plantilla Deportiva'?",
+                options: [
+                    "Solo los salarios de los jugadores.",
+                    "Los salarios de los jugadores y el cuerpo técnico.",
+                    "Los salarios, amortizaciones, seguridad social e indemnizaciones de jugadores y cuerpo técnico.",
+                    "Solo las amortizaciones de los derechos federativos de los jugadores."
+                ],
+                answer: 2
+            },
+            {
+                question: "¿Qué es el 'Punto de Equilibrio Presupuestario'?",
+                options: [
+                    "El punto en el que los ingresos igualan a los gastos.",
+                    "El punto en el que los beneficios superan a las pérdidas.",
+                    "Un requisito que deben cumplir los presupuestos de los clubes y SADs para ser aprobados.",
+                    "Todas las anteriores."
+                ],
+                answer: 3
+            },
+            {
+                question: "¿En qué casos se puede incrementar el Límite de Coste de Plantilla Deportiva?",
+                options: [
+                    "Por aumento de ingresos o beneficios.",
+                    "Por aportaciones de capital.",
+                    "Por lesión de larga duración de un jugador.",
+                    "Todas las anteriores."
+                ],
+                answer: 3
+            },
+            {
+                question: "¿Qué son las 'Aportaciones' en el contexto de estas normas?",
+                options: [
+                    "Cualquier ingreso de dinero al club o SAD.",
+                    "Solo las donaciones realizadas por terceros.",
+                    "Aportaciones dinerarias en concepto de aumento de capital social o donaciones, entre otros.",
+                    "Los préstamos recibidos por el club o SAD."
+                ],
+                answer: 2
+            },
+            {
+                question: "¿Cuál es el principio general que rige la inscripción de jugadores y técnicos?",
+                options: [
+                    "El coste de la plantilla no puede superar el límite asignado.",
+                    "Solo se pueden inscribir jugadores si el club tiene beneficios.",
+                    "La inscripción depende exclusivamente de la categoría en la que participe el club.",
+                    "Ninguna de las anteriores."
+                ],
+                answer: 0
+            }
+        ];
+
+        // Función para generar el HTML de las preguntas
+        function generateQuiz() {
+            const questionsDiv = document.getElementById("questions");
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+                questionDiv.innerHTML = `
+                    <h2>${index + 1}. ${q.question}</h2>
+                    ${q.options.map((option, optionIndex) => `
+                        <label>
+                            <input type="radio" name="q${index}" value="${optionIndex}"> ${option}
+                        </label>
+                    `).join('')}
+                `;
+                questionsDiv.appendChild(questionDiv);
+            });
+        }
+
+        // Función para verificar las respuestas y mostrar el resultado
+        function checkAnswers() {
+            let score = 0;
+            questions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selectedOption && parseInt(selectedOption.value) === q.answer) {
+                    score++;
+                }
+            });
+
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = `Resultado: ${score} de ${questions.length}`;
+        }
+
+        // Generar el cuestionario al cargar la página
+        generateQuiz();
+    </script>
+</body>
+</html>
