@@ -1,279 +1,143 @@
-<html><head><base href="https://www.fcbarcelona.com/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FC Barcelona - Creador de Alineación</title>
+<html><head><base href="https://www.realmadrid-parodia.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real Madrid: Penalti Favorito</title>
 <style>
-    :root {
-        --primary-color: #004D98;
-        --secondary-color: #A50044;
-        --accent-color: #FFED02;
-        --bg-color: #181733;
-        --text-color: #FFFFFF;
-    }
-    body {
-        font-family: 'Barlow', sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        background-image: linear-gradient(45deg, #004D98, #A50044);
-    }
-    .logo {
-        width: 120px;
-        height: auto;
-        margin: 20px 0;
-        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-        transition: transform 0.3s ease;
-    }
-    .logo:hover {
-        transform: scale(1.05);
-    }
-    .container {
-        display: flex;
-        gap: 30px;
-        padding: 20px;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(10px);
-    }
-    #campo {
-        width: 600px;
-        height: 400px;
-        background-image: url('/a/e5602491-a8b0-4c63-906f-14b90a21be73');
-        background-size: cover;
-        background-position: center;
-        position: relative;
-        border: 3px solid var(--accent-color);
-        border-radius: 10px;
-        overflow: hidden;
-        transition: box-shadow 0.3s ease;
-    }
-    #campo:hover {
-        box-shadow: 0 0 20px var(--accent-color);
-    }
-    .jugador {
-        width: 80px;
-        height: 120px;
-        position: absolute;
-        cursor: move;
-        background-size: cover;
-        background-position: center;
-        transition: transform 0.2s ease;
-        z-index: 10;
-        filter: drop-shadow(0 0 5px rgba(255, 237, 2, 0.7));
-    }
-    .jugador:hover {
-        transform: scale(1.05);
-    }
-    #iconos {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        max-width: 350px;
-        max-height: 500px;
-        border: 2px solid var(--accent-color);
-        padding: 15px;
-        background-color: rgba(0, 77, 152, 0.3);
-        overflow-y: auto;
-        border-radius: 10px;
-    }
-    .icono {
-        width: 80px;
-        height: 120px;
-        background-size: cover;
-        background-position: center;
-        cursor: move;
-        position: relative;
-        border-radius: 5px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .icono:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 15px var(--accent-color);
-    }
-    #controles {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-    }
-    button {
-        margin: 5px;
-        padding: 12px 20px;
-        font-size: 16px;
-        background-color: var(--secondary-color);
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s;
-        border-radius: 5px;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-    button:hover {
-        background-color: #7B0031;
-        transform: translateY(-2px);
-    }
-    button:active {
-        transform: translateY(0);
-    }
-    h1 {
-        color: var(--accent-color);
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        margin-bottom: 20px;
-    }
-    @media (max-width: 768px) {
-        .container {
-            flex-direction: column;
-        }
-        #campo {
-            width: 100%;
-            height: 300px;
-        }
-        #iconos {
-            flex-direction: row;
-            max-height: none;
-            overflow-x: auto;
-            overflow-y: hidden;
-        }
-    }
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  #game-container {
+    text-align: center;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  #field {
+    width: 300px;
+    height: 200px;
+    background-color: #0a0;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+  }
+  #player {
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    position: absolute;
+    transition: all 0.3s ease;
+  }
+  #ball {
+    width: 10px;
+    height: 10px;
+    background-color: #f90;
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.3s ease;
+  }
+  button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  #message {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <img src="/a/68b188a8-3fb2-4d54-9c5d-31690f3027b0" alt="Logo del FC Barcelona" class="logo">
-    <h1>Creador de Alineación del FC Barcelona</h1>
-    <div class="container">
-        <div id="iconos">
-            <div class="icono" draggable="true" style="background-image: url('/a/75b65afd-1ec8-4175-a93e-cdfe58242479');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/752d7971-a09a-4a36-9b2d-2384cab8ee02');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/c8244f02-7612-4c40-b2b4-def15aa7d1b3');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/275d1324-7d69-424b-8f32-8f737d2e7231');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/41b3bf26-21da-4e8b-b815-679d8ae0b162');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/66bf1d1d-0d55-4d74-85da-4c8c4b513869');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/93a158c5-dd71-434f-bf43-9c6be3c7fb32');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/0fa68dc0-a1b5-4759-9515-ef359fd5380d');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/7c2c817a-b96d-4e5d-97c2-c0eb8da39e23');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/0ff26d41-93b3-433d-bf0a-72001b02b40c');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/a70eff29-334a-48f3-be2f-a4be5a5bd7a6');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/b7644396-835f-4e91-8c49-1deda1bae29b');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/b2f19a41-c02b-43a0-8326-061ef6ded0df');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/d2a5e3a7-9d7c-41f7-bc53-2e9c117d7777');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/6bc119e5-b187-47b2-8fee-14009dd31b55');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/4a5b25a6-c882-4737-97cd-5a9ba76dd458');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/cd75fd1c-3bfb-48fb-9850-ff46fec6de66');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/983ddb07-6525-42f6-9a8a-51c9d881b241');"></div>
-            <div class="icono" draggable="true" style="background-image: url('/a/f5f33f5a-e1ca-4f10-a2cf-fa9e0c97063d');"></div>
-        </div>
-        <div>
-            <div id="campo"></div>
-            <div id="controles">
-                <button id="limpiar">Limpiar Campo</button>
-            </div>
-        </div>
+  <div id="game-container">
+    <h1>Real Madrid: Penalti Favorito</h1>
+    <div id="field">
+      <div id="player"></div>
+      <div id="ball"></div>
     </div>
+    <button id="action-btn">Acción</button>
+    <div id="message"></div>
+  </div>
+
+<audio id="penaltiSound" src="https://github.com/URTYK/urtyk.github.io/raw/refs/heads/main/penalti.mp3"></audio>
 
 <script>
-    const campo = document.getElementById('campo');
-    const iconos = document.getElementById('iconos');
-    const btnLimpiar = document.getElementById('limpiar');
-    let jugadorCount = 0;
-    let jugadorArrastrado = null;
-    let isDragging = false;
+const player = document.getElementById('player');
+const ball = document.getElementById('ball');
+const actionBtn = document.getElementById('action-btn');
+const message = document.getElementById('message');
+const field = document.getElementById('field');
+const penaltiSound = document.getElementById('penaltiSound');
 
-    btnLimpiar.addEventListener('click', limpiarCampo);
+let playerX = 140;
+let playerY = 90;
+let ballX = 145;
+let ballY = 95;
 
-    function limpiarCampo() {
-        campo.innerHTML = '';
-        jugadorCount = 0;
-    }
+function updatePositions() {
+  player.style.left = playerX + 'px';
+  player.style.top = playerY + 'px';
+  ball.style.left = ballX + 'px';
+  ball.style.top = ballY + 'px';
+}
 
-    function crearJugador(imagenSrc) {
-        const jugador = document.createElement('div');
-        jugador.className = 'jugador';
-        jugador.draggable = true;
-        jugador.style.backgroundImage = imagenSrc;
-        jugador.addEventListener('dblclick', eliminarJugador);
-        return jugador;
-    }
+function randomAction() {
+  const actions = [
+    "¡El jugador del Real Madrid se tira al suelo sin contacto!",
+    "¡El jugador del Real Madrid patea el balón fuera del campo!",
+    "¡El jugador del Real Madrid comete una falta clara!",
+    "¡El jugador del Real Madrid insulta al árbitro!",
+    "¡El jugador del Real Madrid simula una lesión!",
+    "¡El jugador del Real Madrid intenta morder a un oponente!",
+    "¡El jugador del Real Madrid finge ser empujado por el viento!",
+    "¡El jugador del Real Madrid confunde el balón con su ego y lo infla más!",
+    "¡El jugador del Real Madrid intenta sobornar al árbitro con cromos repetidos!",
+    "¡El jugador del Real Madrid pide tiempo muerto para arreglarse el pelo!",
+    "¡El jugador del Real Madrid hace una chilena... y falla estrepitosamente!",
+    "¡El jugador del Real Madrid confunde el campo con una pasarela de moda!",
+    "¡El jugador del Real Madrid intenta hipnotizar al portero rival con su mirada!",
+    "¡El jugador del Real Madrid se tropieza con sus propios cordones!",
+    "¡El jugador del Real Madrid celebra un gol... en su propia portería!"
+  ];
+  return actions[Math.floor(Math.random() * actions.length)];
+}
 
-    function eliminarJugador(e) {
-        e.target.remove();
-        jugadorCount--;
-    }
+actionBtn.addEventListener('click', () => {
+  playerX = Math.random() * 280;
+  playerY = Math.random() * 180;
+  ballX = Math.random() * 290;
+  ballY = Math.random() * 190;
+  updatePositions();
+  
+  const action = randomAction();
+  message.textContent = action;
+  
+  setTimeout(() => {
+    message.textContent = "¡PENALTI A FAVOR DEL REAL MADRID!";
+    playerX = 140;
+    playerY = 160;
+    ballX = 145;
+    ballY = 180;
+    updatePositions();
+    penaltiSound.play(); // Reproducir el sonido cuando se otorga el penalti
+  }, 2000);
+});
 
-    function inicializarDragAndDrop() {
-        document.addEventListener('dragstart', (e) => {
-            if (e.target.classList.contains('icono') || e.target.classList.contains('jugador')) {
-                jugadorArrastrado = e.target;
-                e.dataTransfer.setData('text/plain', e.target.style.backgroundImage);
-                e.dataTransfer.effectAllowed = 'move';
-                isDragging = true;
-            }
-        });
-
-        document.addEventListener('dragend', (e) => {
-            isDragging = false;
-        });
-
-        campo.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-        });
-
-        iconos.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-        });
-
-        campo.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const imagenSrc = e.dataTransfer.getData('text/plain');
-            if (jugadorCount < 11 || jugadorArrastrado.classList.contains('jugador')) {
-                const rect = campo.getBoundingClientRect();
-                const x = e.clientX - rect.left - 40;
-                const y = e.clientY - rect.top - 60;
-
-                if (jugadorArrastrado.classList.contains('icono')) {
-                    const nuevoJugador = crearJugador(imagenSrc);
-                    nuevoJugador.style.left = x + 'px';
-                    nuevoJugador.style.top = y + 'px';
-                    campo.appendChild(nuevoJugador);
-                    jugadorCount++;
-                } else if (jugadorArrastrado.classList.contains('jugador')) {
-                    jugadorArrastrado.style.left = x + 'px';
-                    jugadorArrastrado.style.top = y + 'px';
-                }
-            } else {
-                alert('Ya has agregado 11 jugadores, que es el máximo permitido en un equipo de fútbol.');
-            }
-            jugadorArrastrado = null;
-        });
-
-        iconos.addEventListener('drop', (e) => {
-            e.preventDefault();
-            if (jugadorArrastrado && jugadorArrastrado.classList.contains('jugador')) {
-                jugadorArrastrado.remove();
-                jugadorCount--;
-            }
-            jugadorArrastrado = null;
-        });
-
-        campo.addEventListener('mousemove', (e) => {
-            if (isDragging && jugadorArrastrado && jugadorArrastrado.classList.contains('jugador')) {
-                const rect = campo.getBoundingClientRect();
-                const x = e.clientX - rect.left - 40;
-                const y = e.clientY - rect.top - 60;
-                jugadorArrastrado.style.left = x + 'px';
-                jugadorArrastrado.style.top = y + 'px';
-            }
-        });
-
-        campo.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-    }
-
-    inicializarDragAndDrop();
+updatePositions();
 </script>
 </body></html>
