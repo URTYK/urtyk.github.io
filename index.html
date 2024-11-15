@@ -1,143 +1,396 @@
-<html><head><base href="https://www.realmadrid-parodia.com/">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real Madrid: Penalti Favorito</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  #game-container {
-    text-align: center;
-    background-color: #333;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-  }
-  #field {
-    width: 300px;
-    height: 200px;
-    background-color: #0a0;
-    margin: 20px auto;
-    position: relative;
-    overflow: hidden;
-  }
-  #player {
-    width: 20px;
-    height: 20px;
-    background-color: #fff;
-    position: absolute;
-    transition: all 0.3s ease;
-  }
-  #ball {
-    width: 10px;
-    height: 10px;
-    background-color: #f90;
-    border-radius: 50%;
-    position: absolute;
-    transition: all 0.3s ease;
-  }
-  button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  #message {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
-  }
-</style>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rain Viewer Maps API Example</title>
+
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link href="https://unpkg.com/leaflet/dist/leaflet.css" rel="stylesheet" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style type="text/css">
+        body,
+        ul {
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+            display: block;
+            margin: 0;
+            padding: 12px 20px;
+        }
+
+        /* Leyenda de Intensidad en la parte izquierda */
+        .legend {
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1000;
+            position: absolute;
+            top: 50%; /* Centrar verticalmente */
+            left: 10px; /* Mantener en el lado izquierdo */
+            transform: translateY(-50%); /* Alineación exacta en el centro vertical */
+            max-width: 220px;
+            font-size: 14px;
+        }
+
+        .legend .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .legend .color-value {
+            font-size: 12px;
+        }
+
+        /* Controles en la parte inferior */
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #timestamp {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            margin: 0 10px;
+        }
+    </style>
 </head>
+
 <body>
-  <div id="game-container">
-    <h1>Real Madrid: Penalti Favorito</h1>
-    <div id="field">
-      <div id="player"></div>
-      <div id="ball"></div>
+    <div id="mapid" style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; z-index: 0;"></div>
+
+    <!-- Controles en la parte inferior -->
+    <ul style="position: absolute; top: 0; left: 0; width: 100%; background-color: white; z-index: 1; text-align: center;">
+        <li>
+            <input type="button" onclick="stop(); showFrame(animationPosition - 1); return;" value="&lt;" />
+            <input type="button" onclick="playStop();" value="Play / Stop" />
+            <input type="button" onclick="stop(); showFrame(animationPosition + 1); return;" value="&gt;" />
+        </li>
+
+        <!-- Aquí es donde se mostrará la hora de la capa -->
+        <li id="timestamp" style="text-align:center;">FRAME TIME</li>
+    </ul>
+
+    <!-- Leyenda de Intensidad en la parte izquierda -->
+    <div class="legend" id="legend">
+        <h4>LLUVIA</h4>
+        <div class="item">
+            <div class="color-box" style="background-color: #66ff66;"></div>
+            <span class="color-value">Nublado</span>
+        </div>
+        <div class="item">
+            <div class="color-box" style="background-color: #33cc33;"></div>
+            <span class="color-value">Lluvia ligera</span>
+        </div>
+        <div class="item">
+            <div class="color-box" style="background-color: #006600;"></div>
+            <span class="color-value">Lluvia moderada</span>
+        </div>
+        <div class="item">
+            <div class="color-box" style="background-color: #ffff00;"></div>
+            <span class="color-value">Lluvia fuerte</span>
+        </div>
+        <div class="item">
+            <div class="color-box" style="background-color: #ff0000;"></div>
+            <span class="color-value">Aguacero</span>
+        </div>
+        <div class="item">
+            <div class="color-box" style="background-color: #660000;"></div>
+            <span class="color-value">Granizo</span>
+        </div>
     </div>
-    <button id="action-btn">Acción</button>
-    <div id="message"></div>
-  </div>
 
-<audio id="penaltiSound" src="https://github.com/URTYK/urtyk.github.io/raw/refs/heads/main/penalti.mp3"></audio>
+    <script>
+        var map = L.map('mapid').setView([40.4168, -3.7038], 6); // Coordenadas para Madrid
 
-<script>
-const player = document.getElementById('player');
-const ball = document.getElementById('ball');
-const actionBtn = document.getElementById('action-btn');
-const message = document.getElementById('message');
-const field = document.getElementById('field');
-const penaltiSound = document.getElementById('penaltiSound');
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attributions: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-let playerX = 140;
-let playerY = 90;
-let ballX = 145;
-let ballY = 95;
+        // Función para mostrar la ubicación del usuario
+        function showUserLocation(position) {
+            var userLat = position.coords.latitude;
+            var userLon = position.coords.longitude;
 
-function updatePositions() {
-  player.style.left = playerX + 'px';
-  player.style.top = playerY + 'px';
-  ball.style.left = ballX + 'px';
-  ball.style.top = ballY + 'px';
-}
+            // Centrar el mapa en la ubicación del usuario
+            map.setView([userLat, userLon], 13);
 
-function randomAction() {
-  const actions = [
-    "¡El jugador del Real Madrid se tira al suelo sin contacto!",
-    "¡El jugador del Real Madrid patea el balón fuera del campo!",
-    "¡El jugador del Real Madrid comete una falta clara!",
-    "¡El jugador del Real Madrid insulta al árbitro!",
-    "¡El jugador del Real Madrid simula una lesión!",
-    "¡El jugador del Real Madrid intenta morder a un oponente!",
-    "¡El jugador del Real Madrid finge ser empujado por el viento!",
-    "¡El jugador del Real Madrid confunde el balón con su ego y lo infla más!",
-    "¡El jugador del Real Madrid intenta sobornar al árbitro con cromos repetidos!",
-    "¡El jugador del Real Madrid pide tiempo muerto para arreglarse el pelo!",
-    "¡El jugador del Real Madrid hace una chilena... y falla estrepitosamente!",
-    "¡El jugador del Real Madrid confunde el campo con una pasarela de moda!",
-    "¡El jugador del Real Madrid intenta hipnotizar al portero rival con su mirada!",
-    "¡El jugador del Real Madrid se tropieza con sus propios cordones!",
-    "¡El jugador del Real Madrid celebra un gol... en su propia portería!"
-  ];
-  return actions[Math.floor(Math.random() * actions.length)];
-}
+            // Agregar un marcador en la ubicación del usuario
+            L.marker([userLat, userLon]).addTo(map)
+                .bindPopup("¡Estás aquí!")
+                .openPopup();
+        }
 
-actionBtn.addEventListener('click', () => {
-  playerX = Math.random() * 280;
-  playerY = Math.random() * 180;
-  ballX = Math.random() * 290;
-  ballY = Math.random() * 190;
-  updatePositions();
-  
-  const action = randomAction();
-  message.textContent = action;
-  
-  setTimeout(() => {
-    message.textContent = "¡PENALTI A FAVOR DEL REAL MADRID!";
-    playerX = 140;
-    playerY = 160;
-    ballX = 145;
-    ballY = 180;
-    updatePositions();
-    penaltiSound.play(); // Reproducir el sonido cuando se otorga el penalti
-  }, 2000);
-});
+        // Función para manejar errores si no se puede obtener la ubicación
+        function locationError(error) {
+            alert("No se pudo obtener la ubicación: " + error.message);
+        }
 
-updatePositions();
-</script>
-</body></html>
+        // Intentar obtener la ubicación del usuario
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showUserLocation, locationError);
+        } else {
+            alert("Geolocalización no es compatible con este navegador.");
+        }
+
+        var apiData = {};
+        var mapFrames = [];
+        var lastPastFramePosition = -1;
+        var radarLayers = [];
+
+        var host = "https://tilecache.rainviewer.com";
+        var apiUrl = "https://api.rainviewer.com/public/weather-maps.json";
+        var optionKind = 'nwpprecip';
+
+        var optionTileSize = 512;
+        var optionExtension = 'png';
+        var optionColorScheme = 2;
+        var optionSmoothData = 1;
+        var optionSnowColors = 1;
+
+        var animationPosition = 0;
+        var animationTimer = false;
+
+        var loadingTilesCount = 0;
+        var loadedTilesCount = 0;
+
+        var apiKey = localStorage.getItem('apiKey');
+        if (apiKey) {
+            document.getElementById('apikey').value = apiKey;
+        }
+
+        function applyApiKey(key) {
+            apiKey = key;
+            localStorage.setItem('apiKey', apiKey);
+        }
+
+        function startLoadingTile() {
+            loadingTilesCount++;
+        }
+
+        function finishLoadingTile() {
+            setTimeout(function () { loadedTilesCount++; }, 250);
+        }
+
+        function isTilesLoading() {
+            return loadingTilesCount > loadedTilesCount;
+        }
+
+        function doApiRequest() {
+            var apiRequest = new XMLHttpRequest();
+            apiRequest.open("GET", apiUrl, true);
+            if (apiKey) {
+                apiRequest.setRequestHeader("x-api-key", apiKey);
+            }
+            apiRequest.onload = function (e) {
+                var result = JSON.parse(apiRequest.response);
+
+                if (apiKey) {
+                    document.getElementsByClassName('with-api-key')[0].style.display = 'block';
+                    apiData = result.data;
+                } else {
+                    apiData = result;
+                }
+                initialize(apiData, optionKind);
+            };
+            apiRequest.send();
+        }
+        doApiRequest();
+
+        function initialize(api, kind) {
+            for (var i in radarLayers) {
+                map.removeLayer(radarLayers[i]);
+            }
+            mapFrames = [];
+            radarLayers = [];
+            animationPosition = 0;
+
+            if (!api) {
+                return;
+            }
+            if (apiKey) {
+                // Asignar solo las imágenes de radar del pasado
+                mapFrames = api[kind].past;
+                lastPastFramePosition = api[kind].past.length - 1;
+                showFrame(lastPastFramePosition, true);
+            } else {
+                if (kind == 'satellite' && api.satellite && api.satellite.infrared) {
+                    mapFrames = api.satellite.infrared;
+                    lastPastFramePosition = api.satellite.infrared.length - 1;
+                    showFrame(lastPastFramePosition, true);
+                }
+                else if (api.radar && api.radar.past) {
+                    // Solo mostrar imágenes de radar del pasado, sin incluir futuras
+                    mapFrames = api.radar.past;
+                    lastPastFramePosition = api.radar.past.length - 1;
+                    showFrame(lastPastFramePosition, true);
+                }
+            }
+        }
+
+        function addLayer(frame) {
+            if (!radarLayers[frame.path]) {
+                var colorScheme = optionKind == 'satellite' || optionKind == 'nwptemp' ? (optionColorScheme == 255 ? 255 : 0) : optionColorScheme;
+                var smooth = optionKind == 'satellite' ? 0 : optionSmoothData;
+                var snow = optionKind == 'satellite' ? 0 : optionSnowColors;
+
+                var framePath = frame.path;
+                if (apiKey) {
+                    framePath = '/private/' + optionKind + '/' + framePath;
+                }
+                var source = new L.tileLayer.customHeader(host + framePath + '/' + optionTileSize + '/{z}/{x}/{y}/' + colorScheme + '/' + smooth + '_' + snow + '.' + optionExtension,
+                    {
+                        tileSize: 256,
+                        opacity: 0.01,
+                        zIndex: frame.time,
+                        maxZoom: 10
+                    });
+
+                source.on('loading', startLoadingTile);
+                source.on('load', finishLoadingTile);
+                source.on('remove', finishLoadingTile);
+
+                radarLayers[frame.path] = source;
+            }
+            if (!map.hasLayer(radarLayers[frame.path])) {
+                map.addLayer(radarLayers[frame.path]);
+            }
+
+            // Actualizar la hora de la capa cargada
+            var timestamp = new Date(frame.time * 1000);
+            document.getElementById("timestamp").innerHTML = 'Hora de la capa: ' + timestamp.toLocaleString() + ' (hora estándar de Europa central)';
+        }
+
+        function changeRadarPosition(position, preloadOnly, force) {
+            while (position >= mapFrames.length) {
+                position -= mapFrames.length;
+            }
+            while (position < 0) {
+                position += mapFrames.length;
+            }
+
+            var currentFrame = mapFrames[animationPosition];
+            var nextFrame = mapFrames[position];
+
+            addLayer(nextFrame);
+
+            if (preloadOnly || (isTilesLoading() && !force)) {
+                return;
+            }
+
+            animationPosition = position;
+
+            if (radarLayers[currentFrame.path]) {
+                radarLayers[currentFrame.path].setOpacity(0);
+            }
+            radarLayers[nextFrame.path].setOpacity(50);
+
+            var pastOrForecast = nextFrame.time > Date.now() / 1000 ? 'FORECAST' : 'PAST';
+
+            document.getElementById("timestamp").innerHTML = pastOrForecast + ': ' + (new Date(nextFrame.time * 1000)).toString();
+        }
+
+        function showFrame(nextPosition, force) {
+            var preloadingDirection = nextPosition - animationPosition > 0 ? 1 : -1;
+
+            changeRadarPosition(nextPosition, false, force);
+            changeRadarPosition(nextPosition + preloadingDirection, true);
+        }
+
+        function stop() {
+            if (animationTimer) {
+                clearTimeout(animationTimer);
+                animationTimer = false;
+                return true;
+            }
+            return false;
+        }
+
+        function play() {
+            showFrame(animationPosition + 1);
+            animationTimer = setTimeout(play, 500);
+        }
+
+        function playStop() {
+            if (!stop()) {
+                play();
+            }
+        }
+
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            switch (e.which || e.keyCode) {
+                case 37:
+                    stop();
+                    showFrame(animationPosition - 1, true);
+                    break;
+                case 39:
+                    stop();
+                    showFrame(animationPosition + 1, true);
+                    break;
+                default:
+                    return;
+            }
+            e.preventDefault();
+            return false;
+        }
+
+        L.TileLayer.CustomHeader = L.TileLayer.extend({
+            initialize: function (url, options) {
+                L.TileLayer.prototype.initialize.call(this, url, options);
+            },
+            createTile: function (coords, done) {
+                var tile = L.TileLayer.prototype.createTile.call(this, coords, done);
+                var url = tile.src;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.responseType = 'blob';
+                if (apiKey) {
+                    xhr.setRequestHeader('x-api-key', apiKey);
+                }
+                xhr.onerror = function () {
+                    done("Tile loading error", tile);
+                };
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        var urlCreator = window.URL || window.webkitURL;
+                        var imageUrl = urlCreator.createObjectURL(this.response);
+                        tile.src = imageUrl;
+                    }
+                    done(null, tile);
+                };
+                xhr.send();
+                return tile;
+            }
+        });
+
+        L.tileLayer.customHeader = function (url, options) {
+            return new L.TileLayer.CustomHeader(url, options);
+        };
+    </script>
+
+</body>
+
+</html>
+
