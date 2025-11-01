@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>🕸️ RIFA SOLIDARIA TERRORÍFICA SONRISA MÉDICA 🕯️</title>
+<style>
+  :root{
+    --bg: #0b0e12; --card: rgba(18,22,29,0.85); --accent: #ff6a00;
+    --blood: #b3002d; --muted: #a7b0c0; --text: #f0f3f8;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{font-family: system-ui, Segoe UI, Roboto, sans-serif;color:var(--text);background: var(--bg);overflow-x:hidden;}
+  .bg-cover{position:fixed; inset:0; z-index:-3; width:100vw; height:100vh; object-fit:cover; object-position:center; filter: blur(18px) brightness(.7) saturate(.9); transform: scale(1.05);}
+  .bg-img{position:fixed; inset:0; z-index:-2; width:100vw; height:100vh; object-fit:contain; object-position:center;}
+  .overlay{position:fixed; inset:0; z-index:-1; pointer-events:none; background: radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%), linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.35)); backdrop-filter: brightness(.95);}
+  .wrap{position:relative;z-index:1;padding:18px;max-width:1280px;margin:0 auto;}
+  header{background:rgba(11,14,18,0.9); border-radius:14px; padding:14px 16px; box-shadow:0 8px 30px rgba(0,0,0,.35); display:flex; flex-direction:column; gap:6px; align-items:center}
+  h1{margin:0;font-size:26px;color:var(--accent);font-weight:800;text-align:center}
+  .sub{color:var(--muted);font-size:13px;text-align:center}
+  .toolbar{margin-top:10px; display:flex; align-items:center; gap:8px; width:100%; overflow-x:auto; white-space:nowrap; padding:4px;}
+  .toolbar::-webkit-scrollbar{height:6px}
+  .toolbar::-webkit-scrollbar-thumb{background:#2a3140;border-radius:6px}
+  input[type="text"],input[type="number"]{padding:8px 10px;border:1px solid #2a3140;border-radius:10px;background:#151a23;color:var(--text);font-size:14px}
+  #inpNums{min-width:380px}  #intervalo{width:68px;text-align:center}
+  .btn{border:none;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:700;background:#1d2330;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.25);font-size:14px}
+  .btn:hover{filter:brightness(1.1)} .btn-go{background:var(--blood);color:#fff}
+  .status{margin-top:8px;color:var(--muted);font-size:13px;text-align:center}
+  .grid{margin-top:14px;display:grid;gap:10px;grid-template-columns:repeat(5,1fr);}
+  .card{background:var(--card);border-radius:16px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(0,0,0,.35);min-height:90px}
+  .card h3{margin:0;font-size:22px;font-weight:800;color:var(--accent)}
+  .big{margin-top:4px;font-size:22px;font-weight:800;font-style:italic}
+  footer{margin-top:12px;color:var(--muted);text-align:center;font-size:13px}
+  @media (max-width:1000px){ .grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:700px){ #inpNums{min-width:260px} .grid{grid-template-columns:repeat(2,1fr);} }
+
+  /* Overlays */
+  .celebrate, .preroll{position:fixed; inset:0; z-index:5; pointer-events:none; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .25s ease;}
+  .celebrate.show, .preroll.show{ opacity:1; }
+  .banner, .pre-banner{
+    background:linear-gradient(135deg,#2a0d14,#3a121b);
+    border:3px solid #ff6a00; color:#fff; padding:26px 36px; border-radius:22px;
+    box-shadow:0 14px 60px rgba(0,0,0,.65), inset 0 0 28px rgba(255,106,0,.25);
+    font-size:clamp(28px, 4.8vw, 56px); font-weight:900; letter-spacing:.6px; text-align:center;
+    transform:scale(.88); animation:pop .7s ease forwards, glow 1.2s ease-in-out infinite alternate;
+  }
+  .banner small, .pre-banner small{display:block; color:#ffb48a; font-size:clamp(13px,1.4vw,18px); margin-top:6px}
+  @keyframes pop { to{ transform:scale(1); } }
+  @keyframes glow { from{ box-shadow:0 14px 60px rgba(0,0,0,.65), inset 0 0 16px rgba(255,106,0,.2);} to{ box-shadow:0 18px 70px rgba(0,0,0,.7),  inset 0 0 32px rgba(255,106,0,.38);} }
+  .confetti{position:fixed; top:-10vh; width:10px; height:14px; opacity:.9; z-index:6; border-radius:2px}
+</style>
+</head>
+<body>
+<img class="bg-cover" src="terror_fondo.png" alt="">
+<img class="bg-img"   src="terror_fondo.png" alt="Fondo terrorífico completo">
+<div class="overlay"></div>
+
+<!-- PREROLL -->
+<div id="preroll" class="preroll" aria-hidden="true">
+  <div class="pre-banner" id="preBannerText">🕯️ EL SORTEO VA A COMENZAR 🕯️<small>Prepárate…</small></div>
+</div>
+
+<!-- FANFARRIA 1–2 -->
+<div id="celebrate" class="celebrate" aria-hidden="true">
+  <div class="banner" id="bannerText">🎺 ¡PREMIO! 🎉<small>Sonrisa Médica</small></div>
+</div>
+
+<!-- Audios HTML (intactos) -->
+<audio id="intro" src="intro_terror.mp3" preload="auto"></audio>
+<audio id="sfx1"  src="fanfarria1.mp3" preload="auto"></audio>
+<audio id="sfx2"  src="fanfarria2.mp3" preload="auto"></audio>
+
+<div class="wrap">
+  <header>
+    <h1>🕸️ RIFA SOLIDARIA TERRORÍFICA SONRISA MÉDICA 🕯️ 💀</h1>
+    <div class="sub">Introduce las papeletas vendidas y deja que el miedo haga su trabajo…</div>
+
+    <div class="toolbar">
+      <input id="inpNums" type="text" placeholder="Pega números o rangos (p.ej. 00000-00200 o 1,2,5-10)" />
+      <button class="btn" id="btnAdd">Añadir</button>
+      <button class="btn" id="btnExport">Exportar</button>
+      <span style="color:#7d8798;font-size:12px;margin:0 4px">Intervalo (s)</span>
+      <input id="intervalo" type="number" min="1" value="5" />
+      <button class="btn" id="btnIntervalo">Aplicar</button>
+      <button class="btn btn-go" id="btnStart">Iniciar</button>
+      <button class="btn" id="btnStop">Detener</button>
+      <button class="btn" id="btnReset">Reiniciar</button>
+    </div>
+
+    <div class="status" id="status">Vendidas: 0 | Disponibles: 0 | Siguiente premio: 1/25 | Estado: DETENIDO</div>
+  </header>
+
+  <section class="grid" id="grid"></section>
+  <footer>Los números de PAPELETA se revelan en orden de PREMIO (1→25). Sin repeticiones. 🎃</footer>
+</div>
+
+<script>
+(() => {
+  const TOTAL_PREMIOS = 25;
+  const CONFETTI_MS = 8000;
+  const PREROLL_MS  = 20000;
+  const state = {
+    vendidos:new Set(), resultados:[], running:false, timer:null,
+    intervaloMs:5000, padWidth:5, audioReady:false, prerollActive:false
+  };
+
+  const zpad=(n,w)=>String(n).padStart(w,"0");
+  const niceInt=s=>{const v=parseInt(String(s).trim(),10);return Number.isFinite(v)?v:null;}
+
+  // ==== HTML audio (intactos 1–2 + intro) ====
+  const intro = document.getElementById('intro');
+  const sfx1  = document.getElementById('sfx1'); // Premio 1
+  const sfx2  = document.getElementById('sfx2'); // Premio 2
+  [intro,sfx1,sfx2].forEach(a=>a.addEventListener('error', e=>console.warn('⚠️ Error cargando audio HTML', e)));
+
+  // ==== Audios HTML para premios 3–25 (uno por premio) ====
+  const prizeAudio = {};        // {3: HTMLAudioElement, ..., 25: HTMLAudioElement}
+  const missingAudio = {};      // {n: true} si dio error de carga
+  let fallbackAudio = null;     // premio.mp3 opcional
+
+  function createPrizeAudios(){
+    for(let i=3;i<=25;i++){
+      const el = new Audio(`premio${i}.mp3`);
+      el.preload = 'auto';
+      el.addEventListener('error', ()=>{ missingAudio[i]=true; console.warn(`❌ No se pudo cargar premio${i}.mp3`); });
+      prizeAudio[i]=el;
+    }
+    // Fallback opcional
+    fallbackAudio = new Audio('premio.mp3');
+    fallbackAudio.preload = 'auto';
+    fallbackAudio.addEventListener('error', ()=>{ console.warn('❌ No se pudo cargar premio.mp3 (fallback)'); fallbackAudio=null; });
+  }
+  createPrizeAudios();
+
+  // Desbloqueo general de audio con gesto del usuario
+  async function primeAudio(){
+    const allEls = [intro,sfx1,sfx2, ...Object.values(prizeAudio), fallbackAudio].filter(Boolean);
+    for(const a of allEls){
+      try{ a.muted=true; await a.play(); a.pause(); a.currentTime=0; a.muted=false; }catch(_){}
+    }
+    state.audioReady = true;
+  }
+  window.addEventListener('pointerdown', async ()=>{ if(!state.audioReady){ await primeAudio(); } });
+
+  // Overlays
+  const celebrateEl = document.getElementById('celebrate');
+  const bannerText  = document.getElementById('bannerText');
+  const prerollEl   = document.getElementById('preroll');
+  const preBanner   = document.getElementById('preBannerText');
+
+  function spawnConfetti(n=150, duration=CONFETTI_MS){
+    for(let i=0;i<n;i++){
+      const p=document.createElement('div');
+      p.className='confetti';
+      const size = 6 + Math.random()*10;
+      p.style.width = size+'px';
+      p.style.height = (size*1.4)+'px';
+      p.style.left = Math.random()*100+'vw';
+      p.style.background = randomConfettiColor();
+      const rot = Math.random()*360;
+      const drift = (Math.random()*2 - 1) * 60;
+      const delay = Math.random()*600;
+      p.style.filter = 'drop-shadow(0 2px 2px rgba(0,0,0,.2))';
+      p.animate(
+        [{ transform: `translate(0,-12vh) rotate(${rot}deg)` },
+         { transform: `translate(${drift}px,110vh) rotate(${rot+720}deg)` }],
+        { duration: duration + Math.random()*800, delay, easing:'cubic-bezier(.2,.7,.2,1)' }
+      );
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(), duration + 1500);
+    }
+  }
+  function randomConfettiColor(){
+    const palette=['#ff6a00','#ffd166','#06d6a0','#118ab2','#ef476f','#b3002d','#f0f3f8'];
+    return palette[Math.floor(Math.random()*palette.length)];
+  }
+
+  async function playHTML(el, vol=1){
+    try{
+      if(!state.audioReady) await primeAudio();
+      el.currentTime=0; el.volume=vol;
+      await el.play();
+    }catch(e){ console.warn('HTML audio bloqueado', e); }
+  }
+
+  // === Selección de sonido por premio ===
+  async function playPrizeSfx(idx){
+    if(idx===1) return playHTML(sfx1, 1.0);
+    if(idx===2) return playHTML(sfx2, 1.0);
+    // 3–25: uno por premio mediante <audio>
+    const el = prizeAudio[idx];
+    if(el && !missingAudio[idx]) return playHTML(el, 1.0);
+    if(fallbackAudio) return playHTML(fallbackAudio, 1.0);
+    console.warn(`🔇 Sin audio para premio ${idx} y sin fallback.`);
+  }
+
+  function showFanfare(premioNumero){
+    bannerText.innerHTML = `🎺 ¡PREMIO ${premioNumero}! 🎉<small>Sonrisa Médica</small>`;
+    celebrateEl.classList.add('show');
+    spawnConfetti(premioNumero===1?180:160, CONFETTI_MS);
+    playPrizeSfx(premioNumero);
+    setTimeout(()=> celebrateEl.classList.remove('show'), 4500);
+  }
+
+  // ====== LÓGICA RIFA ======
+  function parseInput(t){
+    const res=new Set(); if(!t)return res;
+    for(const it of t.replace(/;/g,",").split(",").map(x=>x.trim()).filter(Boolean)){
+      if(it.includes("-")){
+        const [a0,b0]=it.split("-",2).map(x=>x.trim());
+        const a=niceInt(a0),b=niceInt(b0);
+        if(a==null||b==null||a<0||b<0) throw Error(`Rango inválido: "${it}"`);
+        for(let k=Math.min(a,b);k<=Math.max(a,b);k++)res.add(k);
+      }else{
+        const n=niceInt(it); if(n==null||n<0) throw Error(`Número inválido: "${it}"`);
+        res.add(n);
+      }
+    }
+    return res;
+  }
+
+  function updatePadWidth(){
+    if(!state.vendidos.size){state.padWidth=5;return;}
+    state.padWidth=Math.max(5,String(Math.max(...state.vendidos)).length);
+  }
+  function updateStatus(){
+    const premiadas=new Set(state.resultados.map(r=>r[1]));
+    const disp=Math.max(0,state.vendidos.size-premiadas.size);
+    const prox=Math.min(state.resultados.length+1,TOTAL_PREMIOS);
+    const est=state.prerollActive ? "PREROLL" : (state.running?"EN CURSO":"DETENIDO");
+    status.textContent=`Vendidas: ${state.vendidos.size} | Disponibles: ${disp} | Siguiente premio: ${prox}/${TOTAL_PREMIOS} | Estado: ${est}`;
+  }
+
+  const grid=document.getElementById("grid"),cards=[];
+  for(let i=1;i<=TOTAL_PREMIOS;i++){
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`<h3>🏆 PREMIO ${i}</h3><div class="big">PAPELETA —</div>`;
+    grid.appendChild(c); cards[i]=c.querySelector(".big");
+  }
+
+  function pintarCard(idx,n){
+    const el=cards[idx]; if(!el)return;
+    el.textContent=`PAPELETA ${zpad(n,state.padWidth)}`;
+    el.parentElement.style.boxShadow="0 0 8px 2px #2a0d14 inset";
+    setTimeout(()=>el.parentElement.style.boxShadow="0 6px 24px rgba(0,0,0,.35)",220);
+  }
+
+  function tick(){
+    if(!state.running)return;
+    const idx=state.resultados.length+1;
+    if(idx>TOTAL_PREMIOS){stop();alert("Se han revelado todos los premios.");return;}
+    const usados=new Set(state.resultados.map(r=>r[1]));
+    const disp=[...state.vendidos].filter(v=>!usados.has(v));
+    if(!disp.length){stop();alert("No quedan papeletas.");return;}
+    const n=disp[Math.floor(Math.random()*disp.length)];
+    state.resultados.push([idx,n]); pintarCard(idx,n); updateStatus();
+
+    // Sonido por premio
+    playPrizeSfx(idx);
+
+    // Fanfarrias en 1 y 2
+    if(idx===1 || idx===2){ showFanfare(idx); }
+
+    if(state.resultados.length>=TOTAL_PREMIOS){stop();alert("Completado.");}
+  }
+
+  function beginRaffle(){
+    state.prerollActive=false;
+    state.running=true; updateStatus();
+    tick();
+    state.timer=setInterval(tick,state.intervaloMs);
+  }
+
+  async function startPreRoll(){
+    state.prerollActive=true; updateStatus();
+    preBanner.innerHTML = `🕯️ EL SORTEO VA A COMENZAR 🕯️`;
+    prerollEl.classList.add('show');
+
+    // Desbloqueo de audio y precarga (ahora todo es HTMLAudio)
+    await primeAudio();
+
+    // Música de intro
+    playHTML(intro, 1.0);
+
+    setTimeout(()=>{
+      prerollEl.classList.remove('show');
+      try{ intro.pause(); intro.currentTime=0; }catch(_){}
+      beginRaffle();
+    }, PREROLL_MS);
+  }
+
+  function stop(){
+    state.running=false; state.prerollActive=false;
+    clearInterval(state.timer); state.timer=null; updateStatus();
+    celebrateEl.classList.remove('show');
+    prerollEl.classList.remove('show');
+    try{ intro.pause(); intro.currentTime=0; }catch(_){}
+    try{ sfx1.pause(); sfx1.currentTime=0; }catch(_){}
+    try{ sfx2.pause(); sfx2.currentTime=0; }catch(_){}
+    // parar posibles audios de premio en reproducción
+    for(const k in prizeAudio){
+      try{ prizeAudio[k].pause(); prizeAudio[k].currentTime=0; }catch(_){}
+    }
+    try{ fallbackAudio && (fallbackAudio.pause(), fallbackAudio.currentTime=0); }catch(_){}
+  }
+
+  function reset(){
+    if(!confirm("¿Reiniciar manteniendo las vendidas?"))return;
+    stop();
+    state.resultados=[];
+    cards.forEach((c,i)=>{ if(i) cards[i].textContent="PAPELETA —"; });
+    updateStatus();
+  }
+
+  // UI
+  btnAdd.onclick=()=>{
+    try{
+      const t=inpNums.value.trim(); if(!t) return alert("Introduce números o rangos.");
+      const n=parseInput(t); const prev=state.vendidos.size;
+      n.forEach(x=>state.vendidos.add(x));
+      alert(`Añadidos ${state.vendidos.size-prev} números.`);
+      inpNums.value=""; updatePadWidth(); updateStatus();
+    }catch(e){ alert(e.message); }
+  };
+  btnExport.onclick=()=>{
+    if(!state.resultados.length) return alert("Sin resultados.");
+    const csv="Premio,Papeleta\n"+state.resultados.map(([p,n])=>`${p},${zpad(n,state.padWidth)}`).join("\n");
+    const blob=new Blob([csv],{type:"text/csv"}); const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="resultados.csv"; a.click();
+  };
+  btnIntervalo.onclick=()=>{
+    const v=niceInt(intervalo.value); if(!v||v<=0) return alert("Intervalo inválido.");
+    state.intervaloMs=v*1000;
+    if(state.running){ clearInterval(state.timer); state.timer=setInterval(tick,state.intervaloMs); }
+    alert(`Intervalo actualizado a ${v}s`);
+  };
+  btnStart.onclick=async ()=>{
+    if(state.running || state.prerollActive) return;
+    if(!state.vendidos.size){ alert("Añade papeletas primero."); return; }
+    await primeAudio();
+    startPreRoll();
+  };
+  btnStop.onclick=stop; btnReset.onclick=reset;
+
+  updateStatus();
+})();
+</script>
+</body>
+</html>
