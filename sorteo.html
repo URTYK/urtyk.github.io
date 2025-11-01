@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>🕸️ RIFA SOLIDARIA TERRORÍFICA SONRISA MÉDICA 🕯️</title>
+<style>
+  :root{
+    --bg: #0b0e12;
+    --card: rgba(18,22,29,0.85);
+    --accent: #ff6a00;
+    --blood: #b3002d;
+    --muted: #a7b0c0;
+    --text: #f0f3f8;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    font-family: system-ui, Segoe UI, Roboto, sans-serif;
+    color:var(--text);
+    background: var(--bg);
+    overflow-x:hidden;
+  }
+
+  /* Capa 1: fondo de relleno con COVER + BLUR (rellena huecos) */
+  .bg-cover{
+    position:fixed; inset:0; z-index:-3;
+    width:100vw; height:100vh; object-fit:cover; object-position:center;
+    filter: blur(18px) brightness(.7) saturate(.9);
+    transform: scale(1.05);               /* evita bordes duros tras el blur */
+  }
+
+  /* Capa 2: imagen principal visible completa (CONTAIN, sin recortes) */
+  .bg-img{
+    position:fixed; inset:0; z-index:-2;
+    width:100vw; height:100vh; object-fit:contain; object-position:center;
+  }
+
+  /* Capa 3: overlay para viñeta y contraste */
+  .overlay{
+    position:fixed; inset:0; z-index:-1;
+    pointer-events:none;
+    background:
+      radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%),
+      linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.35));
+    backdrop-filter: brightness(.95);
+  }
+
+  .wrap{position:relative;z-index:1;padding:18px;max-width:1280px;margin:0 auto;}
+  header{
+    background:rgba(11,14,18,0.9);
+    border-radius:14px;padding:14px 16px;
+    box-shadow:0 8px 30px rgba(0,0,0,.35);
+    display:flex;flex-direction:column;gap:6px;align-items:center
+  }
+  h1{margin:0;font-size:26px;color:var(--accent);font-weight:800;text-align:center}
+  .sub{color:var(--muted);font-size:13px;text-align:center}
+
+  /* Toolbar en una línea */
+  .toolbar{
+    margin-top:10px;
+    display:flex;align-items:center;gap:8px;
+    width:100%;overflow-x:auto;white-space:nowrap;padding:4px;
+  }
+  .toolbar::-webkit-scrollbar{height:6px}
+  .toolbar::-webkit-scrollbar-thumb{background:#2a3140;border-radius:6px}
+
+  input[type="text"],input[type="number"]{
+    padding:8px 10px;border:1px solid #2a3140;border-radius:10px;
+    background:#151a23;color:var(--text);font-size:14px
+  }
+  #inpNums{min-width:380px}
+  #intervalo{width:68px;text-align:center}
+
+  .btn{
+    border:none;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:700;
+    background:#1d2330;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.25);
+    font-size:14px
+  }
+  .btn:hover{filter:brightness(1.1)}
+  .btn-go{background:var(--blood);color:#fff}
+
+  .status{margin-top:8px;color:var(--muted);font-size:13px;text-align:center}
+
+  .grid{margin-top:14px;display:grid;gap:10px;grid-template-columns:repeat(5,1fr);}
+  .card{
+    background:var(--card);border-radius:16px;padding:12px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:0 6px 24px rgba(0,0,0,.35);min-height:90px
+  }
+  /* Mismo tamaño para título y número */
+  .card h3{
+    margin:0;font-size:22px;font-weight:800;color:var(--accent);
+  }
+  .big{
+    margin-top:4px;font-size:22px;font-weight:800;font-style:italic; /* negrita + cursiva */
+  }
+  footer{margin-top:12px;color:var(--muted);text-align:center;font-size:13px}
+
+  @media (max-width:1000px){
+    .grid{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width:700px){
+    #inpNums{min-width:260px}
+    .grid{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+<!-- Usa la MISMA imagen en ambas capas -->
+<img class="bg-cover" src="terror_fondo.png" alt="">
+<img class="bg-img"   src="terror_fondo.png" alt="Fondo terrorífico completo">
+<div class="overlay"></div>
+
+<div class="wrap">
+  <header>
+    <h1>🕸️ RIFA SOLIDARIA TERRORÍFICA SONRISA MÉDICA 🕯️ 💀</h1>
+    <div class="sub">Introduce las papeletas vendidas y deja que el miedo haga su trabajo…</div>
+
+    <div class="toolbar">
+      <input id="inpNums" type="text" placeholder="Pega números o rangos (p.ej. 00000-00200 o 1,2,5-10)" />
+      <button class="btn" id="btnAdd">Añadir</button>
+      <button class="btn" id="btnExport">Exportar</button>
+      <span style="color:#7d8798;font-size:12px;margin:0 4px">Intervalo (s)</span>
+      <input id="intervalo" type="number" min="1" value="5" />
+      <button class="btn" id="btnIntervalo">Aplicar</button>
+      <button class="btn btn-go" id="btnStart">Iniciar</button>
+      <button class="btn" id="btnStop">Detener</button>
+      <button class="btn" id="btnReset">Reiniciar</button>
+    </div>
+
+    <div class="status" id="status">Vendidas: 0 | Disponibles: 0 | Siguiente premio: 1/25 | Estado: DETENIDO</div>
+  </header>
+
+  <section class="grid" id="grid"></section>
+
+  <footer>Los números de PAPELETA se revelan en orden de PREMIO (1→25). Sin repeticiones. 🎃</footer>
+</div>
+
+<script>
+(() => {
+  const TOTAL_PREMIOS = 25;
+  const state = {vendidos:new Set(),resultados:[],running:false,timer:null,intervaloMs:5000,padWidth:5};
+  const zpad=(n,w)=>String(n).padStart(w,"0");
+  const niceInt=s=>{const v=parseInt(String(s).trim(),10);return Number.isFinite(v)?v:null;}
+
+  function parseInput(t){
+    const res=new Set(); if(!t)return res;
+    for(const it of t.replace(/;/g,",").split(",").map(x=>x.trim()).filter(Boolean)){
+      if(it.includes("-")){
+        const [a0,b0]=it.split("-",2).map(x=>x.trim());
+        const a=niceInt(a0),b=niceInt(b0);
+        if(a==null||b==null||a<0||b<0) throw Error(`Rango inválido: "${it}"`);
+        for(let k=Math.min(a,b);k<=Math.max(a,b);k++)res.add(k);
+      }else{
+        const n=niceInt(it); if(n==null||n<0) throw Error(`Número inválido: "${it}"`);
+        res.add(n);
+      }
+    }
+    return res;
+  }
+
+  function updatePadWidth(){
+    if(!state.vendidos.size){state.padWidth=5;return;}
+    state.padWidth=Math.max(5,String(Math.max(...state.vendidos)).length);
+  }
+  function updateStatus(){
+    const premiadas=new Set(state.resultados.map(r=>r[1]));
+    const disp=Math.max(0,state.vendidos.size-premiadas.size);
+    const prox=Math.min(state.resultados.length+1,TOTAL_PREMIOS);
+    const est=state.running?"EN CURSO":"DETENIDO";
+    status.textContent=`Vendidas: ${state.vendidos.size} | Disponibles: ${disp} | Siguiente premio: ${prox}/${TOTAL_PREMIOS} | Estado: ${est}`;
+  }
+
+  const grid=document.getElementById("grid"),cards=[];
+  for(let i=1;i<=TOTAL_PREMIOS;i++){
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`<h3>🏆 PREMIO ${i}</h3><div class="big">PAPELETA —</div>`;
+    grid.appendChild(c); cards[i]=c.querySelector(".big");
+  }
+
+  function pintarCard(idx,n){
+    const el=cards[idx]; if(!el)return;
+    el.textContent=`PAPELETA ${zpad(n,state.padWidth)}`;
+    el.parentElement.style.boxShadow="0 0 8px 2px #2a0d14 inset";
+    setTimeout(()=>el.parentElement.style.boxShadow="0 6px 24px rgba(0,0,0,.35)",220);
+  }
+
+  function tick(){
+    if(!state.running)return;
+    const idx=state.resultados.length+1;
+    if(idx>TOTAL_PREMIOS){stop();alert("Se han revelado todos los premios.");return;}
+    const usados=new Set(state.resultados.map(r=>r[1]));
+    const disp=[...state.vendidos].filter(v=>!usados.has(v));
+    if(!disp.length){stop();alert("No quedan papeletas.");return;}
+    const n=disp[Math.floor(Math.random()*disp.length)];
+    state.resultados.push([idx,n]); pintarCard(idx,n); updateStatus();
+    if(state.resultados.length>=TOTAL_PREMIOS){stop();alert("Completado.");}
+  }
+  function start(){
+    if(state.running)return;
+    if(!state.vendidos.size){alert("Añade papeletas primero.");return;}
+    state.running=true; updateStatus(); tick();
+    state.timer=setInterval(tick,state.intervaloMs);
+  }
+  function stop(){state.running=false;clearInterval(state.timer);state.timer=null;updateStatus();}
+  function reset(){
+    if(!confirm("¿Reiniciar manteniendo las vendidas?"))return;
+    stop();state.resultados=[];cards.forEach((c,i)=>{if(i)cards[i].textContent="PAPELETA —";});updateStatus();
+  }
+
+  btnAdd.onclick=()=>{
+    try{
+      const t=inpNums.value.trim();if(!t)return alert("Introduce números o rangos.");
+      const n=parseInput(t);const prev=state.vendidos.size;
+      n.forEach(x=>state.vendidos.add(x));
+      alert(`Añadidos ${state.vendidos.size-prev} números.`);
+      inpNums.value="";updatePadWidth();updateStatus();
+    }catch(e){alert(e.message);}
+  };
+  btnExport.onclick=()=>{
+    if(!state.resultados.length)return alert("Sin resultados.");
+    const csv="Premio,Papeleta\n"+state.resultados.map(([p,n])=>`${p},${zpad(n,state.padWidth)}`).join("\n");
+    const blob=new Blob([csv],{type:"text/csv"});const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);a.download="resultados.csv";a.click();
+  };
+  btnIntervalo.onclick=()=>{
+    const v=niceInt(intervalo.value);if(!v||v<=0)return alert("Intervalo inválido.");
+    state.intervaloMs=v*1000;if(state.running){clearInterval(state.timer);state.timer=setInterval(tick,state.intervaloMs);}
+    alert(`Intervalo actualizado a ${v}s`);
+  };
+  btnStart.onclick=start;btnStop.onclick=stop;btnReset.onclick=reset;
+  updateStatus();
+})();
+</script>
+</body>
+</html>
