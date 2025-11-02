@@ -16,14 +16,26 @@
   .bg-img{position:fixed; inset:0; z-index:-2; width:100vw; height:100vh; object-fit:contain; object-position:center;}
   .overlay{position:fixed; inset:0; z-index:-1; pointer-events:none; background: radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%), linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.35)); backdrop-filter: brightness(.95);}
   .wrap{position:relative;z-index:1;padding:18px;max-width:1280px;margin:0 auto;}
-  header{background:rgba(11,14,18,0.9); border-radius:14px; padding:14px 16px; box-shadow:0 8px 30px rgba(0,0,0,.35); display:flex; flex-direction:column; gap:6px; align-items:center}
+  header{background:rgba(11,14,18,0.9); border-radius:14px; padding:14px 16px; box-shadow:0 8px 30px rgba(0,0,0,.35); display:flex; flex-direction:column; gap:10px; align-items:center}
   h1{margin:0;font-size:26px;color:var(--accent);font-weight:800;text-align:center}
   .sub{color:var(--muted);font-size:13px;text-align:center}
-  .toolbar{margin-top:10px; display:flex; align-items:center; gap:8px; width:100%; overflow-x:auto; white-space:nowrap; padding:4px;}
+
+  /* TOOLBAR centrada */
+  .toolbar{
+    margin-top:6px;
+    display:flex; align-items:center; gap:8px;
+    width:100%;
+    justify-content:center;
+    white-space:nowrap; padding:4px;
+    overflow-x:auto;
+  }
   .toolbar::-webkit-scrollbar{height:6px}
   .toolbar::-webkit-scrollbar-thumb{background:#2a3140;border-radius:6px}
-  input[type="text"],input[type="number"]{padding:8px 10px;border:1px solid #2a3140;border-radius:10px;background:#151a23;color:var(--text);font-size:14px}
-  #inpNums{min-width:380px}  #intervalo{width:68px;text-align:center}
+  input[type="text"],input[type="number"]{
+    padding:8px 10px;border:1px solid #2a3140;border-radius:10px;background:#151a23;color:var(--text);font-size:14px
+  }
+  #inpNums{min-width:260px}   /* más pequeño y sin placeholder */
+  #intervalo{width:68px;text-align:center}
   .btn{border:none;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:700;background:#1d2330;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.25);font-size:14px}
   .btn:hover{filter:brightness(1.1)} .btn-go{background:var(--blood);color:#fff}
 
@@ -31,144 +43,92 @@
   .card{position:relative;background:var(--card);border-radius:16px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(0,0,0,.35);min-height:90px; overflow:visible}
   .card h3{margin:0;font-size:22px;font-weight:800;color:var(--accent)}
   .big{margin-top:4px;font-size:22px;font-weight:800;font-style:italic}
-  footer{margin-top:12px;color:var(--muted);text-align:center;font-size:13px}
   @media (max-width:1000px){ .grid{grid-template-columns:repeat(3,1fr);} }
-  @media (max-width:700px){ #inpNums{min-width:260px} .grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:700px){ #inpNums{min-width:220px} .grid{grid-template-columns:repeat(2,1fr);} }
 
-  /* Overlays */
+  /* Overlays (preroll y fanfarria) */
   .celebrate, .preroll{position:fixed; inset:0; z-index:5; pointer-events:none; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .25s ease;}
   .celebrate.show, .preroll.show{ opacity:1; }
-  .banner, .pre-banner{
+
+  /* 🎇 Banner de comienzo (más pulso y brillo) */
+  .pre-banner{
+    background:linear-gradient(135deg,#330a0a,#511313);
+    border:3px solid #ff6a00; color:#fff;
+    padding:30px 40px; border-radius:26px;
+    box-shadow:0 0 60px rgba(255,106,0,.5), inset 0 0 40px rgba(255,106,0,.3);
+    font-size:clamp(28px,4.8vw,60px); font-weight:900; letter-spacing:.8px; text-align:center;
+    transform:scale(.85);
+    animation: pop .7s ease forwards, glowStrong 1.4s ease-in-out infinite alternate, pulseLight 1.8s ease-in-out infinite;
+  }
+  .pre-banner small{display:block;color:#ffb48a;font-size:clamp(13px,1.4vw,18px);margin-top:6px}
+  @keyframes pop { to{ transform:scale(1); } }
+  @keyframes glowStrong{
+    from{ box-shadow:0 0 60px rgba(255,106,0,.3), inset 0 0 20px rgba(255,106,0,.25); filter:brightness(1); }
+    to  { box-shadow:0 0 110px rgba(255,106,0,.75), inset 0 0 70px rgba(255,106,0,.55); filter:brightness(1.22); }
+  }
+  @keyframes pulseLight{
+    0%  { text-shadow:0 0 4px #ff8c00, 0 0 10px #ff6a00, 0 0 20px #ff6a00; }
+    50% { text-shadow:0 0 14px #ffae00, 0 0 28px #ff6a00, 0 0 46px #ff3c00; }
+    100%{ text-shadow:0 0 4px #ff8c00, 0 0 10px #ff6a00, 0 0 20px #ff6a00; }
+  }
+
+  /* Banner fanfarria */
+  .banner{
     background:linear-gradient(135deg,#2a0d14,#3a121b);
     border:3px solid #ff6a00; color:#fff; padding:26px 36px; border-radius:22px;
     box-shadow:0 14px 60px rgba(0,0,0,.65), inset 0 0 28px rgba(255,106,0,.25);
-    font-size:clamp(28px, 4.8vw, 56px); font-weight:900; letter-spacing:.6px; text-align:center;
-    transform:scale(.88); animation:pop .7s ease forwards, glow 1.2s ease-in-out infinite alternate;
+    font-size:clamp(28px, 4.8vw, 56px); font-weight:900; text-align:center;
+    transform:scale(.88); animation:pop .7s ease forwards, glowStrong 1.2s ease-in-out infinite alternate;
   }
-  .banner small, .pre-banner small{display:block; color:#ffb48a; font-size:clamp(13px,1.4vw,18px); margin-top:6px}
-  @keyframes pop { to{ transform:scale(1); } }
-  @keyframes glow { from{ box-shadow:0 14px 60px rgba(0,0,0,.65), inset 0 0 16px rgba(255,106,0,.2);} to{ box-shadow:0 18px 70px rgba(0,0,0,.7),  inset 0 0 32px rgba(255,106,0,.38);} }
+  .banner small{display:block;color:#ffb48a;font-size:clamp(13px,1.4vw,18px);margin-top:6px}
+
   .confetti{position:fixed; top:-10vh; width:10px; height:14px; opacity:.9; z-index:6; border-radius:2px}
 
-  /* ============================
-     ESCENARIO / SPOTLIGHT
-     ============================ */
+  /* EFECTO ESCENARIO EN TARJETAS */
   .card.stage-reveal{
     animation: liftGlow 900ms cubic-bezier(.2,.8,.2,1) 1;
     box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 0 2px rgba(255,106,0,.18) inset, 0 0 40px rgba(255,106,0,.12) inset;
   }
-  @keyframes liftGlow{
-    0%   { transform: translateY(6px) scale(.98); filter: brightness(.95); }
-    60%  { transform: translateY(-4px) scale(1.03); filter: brightness(1.08); }
-    100% { transform: translateY(0) scale(1); filter: brightness(1.0); }
-  }
-
-  /* Cortinas que se abren */
+  @keyframes liftGlow{ 0%{transform:translateY(6px) scale(.98);filter:brightness(.95);} 60%{transform:translateY(-4px) scale(1.03);filter:brightness(1.08);} 100%{transform:translateY(0) scale(1);filter:brightness(1);} }
   .card.curtains::after{
-    content:"";
-    position:absolute; inset:-2px; border-radius:18px;
-    background:
-      repeating-linear-gradient(90deg,#6f0000 0 10px,#8d0000 10px 20px,#b10000 20px 30px);
+    content:""; position:absolute; inset:-2px; border-radius:18px;
+    background:repeating-linear-gradient(90deg,#6f0000 0 10px,#8d0000 10px 20px,#b10000 20px 30px);
     box-shadow: inset 0 0 30px rgba(0,0,0,.6);
-    animation: curtains-open 900ms ease forwards;
-    z-index:3;
+    animation: curtains-open 900ms ease forwards; z-index:3;
   }
-  @keyframes curtains-open{
-    0%   { clip-path: inset(0 0 0 0 round 18px); opacity:1; }
-    70%  { clip-path: inset(0 40% 0 40% round 18px); opacity:.95; }
-    100% { clip-path: inset(0 50% 0 50% round 18px); opacity:0; }
-  }
-
-  /* Foco desde arriba (cono de luz) */
+  @keyframes curtains-open{ 0%{clip-path:inset(0 0 0 0 round 18px);opacity:1;} 70%{clip-path:inset(0 40% 0 40% round 18px);opacity:.95;} 100%{clip-path:inset(0 50% 0 50% round 18px);opacity:0;} }
   .card.spot::before{
-    content:"";
-    position:absolute;
-    left:50%; top:-120%;
-    width:46vw; height:140vh;
-    transform: translateX(-50%);
+    content:""; position:absolute; left:50%; top:-120%; width:46vw; height:140vh; transform:translateX(-50%);
     pointer-events:none;
-    background:
-      radial-gradient(ellipse at 50% 0%,
-        rgba(255,238,180,.68) 0%,
-        rgba(255,220,120,.35) 22%,
-        rgba(255,200,70,.18) 40%,
-        rgba(255,200,70,0) 60%);
-    filter: blur(2px) drop-shadow(0 14px 24px rgba(255,190,90,.25));
-    opacity:0;
-    animation: spot-reveal 1.1s ease-out forwards;
-    z-index:2;
+    background:radial-gradient(ellipse at 50% 0%, rgba(255,238,180,.68) 0%, rgba(255,220,120,.35) 22%, rgba(255,200,70,.18) 40%, rgba(255,200,70,0) 60%);
+    filter:blur(2px) drop-shadow(0 14px 24px rgba(255,190,90,.25)); opacity:0; animation: spot-reveal 1.1s ease-out forwards; z-index:2;
   }
-  @keyframes spot-reveal{
-    0%   { opacity:0; transform: translateX(-50%) translateY(-10px) scaleY(0.9); }
-    60%  { opacity:1; transform: translateX(-50%) translateY(0)    scaleY(1); }
-    100% { opacity:.0; }
-  }
-
-  /* Humo/sparkle sutil saliendo del número */
+  @keyframes spot-reveal{ 0%{opacity:0;transform:translateX(-50%) translateY(-10px) scaleY(0.9);} 60%{opacity:1;transform:translateX(-50%) translateY(0) scaleY(1);} 100%{opacity:0;} }
   .card .stage-spark{
     position:absolute; bottom:10px; left:50%; width:6px; height:6px;
     background: radial-gradient(circle,#ffe7b0 0%, rgba(255,231,176,0) 70%);
-    border-radius:50%; opacity:.0; transform: translateX(-50%);
-    animation: spark-up 1.2s ease-out forwards;
-    z-index:4;
+    border-radius:50%; opacity:0; transform: translateX(-50%); animation: spark-up 1.2s ease-out forwards; z-index:4;
   }
-  @keyframes spark-up{
-    0%   { opacity:.0; transform: translate(-50%, 12px) scale(.6); }
-    20%  { opacity:.7; }
-    100% { opacity:0; transform: translate(-50%,-42px) scale(1.4); }
-  }
+  @keyframes spark-up{ 0%{opacity:0;transform:translate(-50%,12px) scale(.6);} 20%{opacity:.7;} 100%{opacity:0;transform:translate(-50%,-42px) scale(1.4);} }
 
-  /* -------- Franja de patrocinadores (debajo de la toolbar) -------- */
+  /* Patrocinadores */
   .sponsors{
-    margin-top:10px;
-    display:flex;
-    gap:14px;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
+    margin-top:6px; display:flex; gap:14px; align-items:center; justify-content:center; flex-wrap:wrap; width:100%;
   }
   .sponsors img{
-    height:40px;
-    object-fit:contain;
-    background:rgba(255,255,255,0.04);
-    padding:6px 10px;
-    border-radius:10px;
+    height:56px; object-fit:contain; background:rgba(255,255,255,0.04);
+    padding:6px 10px; border-radius:10px;
     box-shadow:0 4px 16px rgba(0,0,0,.28) inset, 0 2px 10px rgba(0,0,0,.25);
-    transition:transform .15s ease, filter .15s ease, opacity .15s ease;
-    opacity:.95;
+    transition:transform .15s ease, filter .15s ease, opacity .15s ease; opacity:.95;
   }
-  .sponsors img:hover{
-    transform:translateY(-1px) scale(1.03);
-    filter:brightness(1.08);
-  }
-  /* Aclara logos SVG si lo necesitas sobre fondo oscuro */
-  .sponsors img[src$=".svg"]{
-    filter: brightness(1.2);
-  }
-  @media (max-width:700px){
-    .sponsors img{ height:34px; }
-  }
+  .sponsors img:hover{ transform:translateY(-1px) scale(1.05); filter:brightness(1.1); }
+  .sponsors img[src$=".svg"]{ filter:brightness(1.2); }
+  @media (max-width:700px){ .sponsors img{ height:48px; } }
 
-  /* -------- Logos sobre el banner de fanfarria -------- */
-  .celebrate { position:fixed; }
-  .celebrate .logo{
-    position:absolute;
-    top:16px;
-    width:56px; height:56px;
-    object-fit:contain;
-    filter: drop-shadow(0 6px 16px rgba(0,0,0,.45));
-    opacity:.95;
-    pointer-events:none;
-  }
-  .celebrate .logo.left{  left:16px; }
-  .celebrate .logo.right{ right:16px; }
-  .celebrate .logo[src$=".svg"]{
-    /* ligero boost para SVG en pantallas oscuras */
-    filter: drop-shadow(0 6px 16px rgba(0,0,0,.45)) brightness(1.2);
-  }
-  @media (max-width:700px){
-    .celebrate .logo{ width:46px; height:46px; top:12px; }
-  }
+  /* Logos sobre el banner de fanfarria */
+  .celebrate .logo{ position:absolute; top:12px; width:80px; height:80px; object-fit:contain; filter:drop-shadow(0 6px 16px rgba(0,0,0,.45)); opacity:.95; pointer-events:none; }
+  .celebrate .logo.left{left:16px;} .celebrate .logo.right{right:16px;}
+  .celebrate .logo[src$=".svg"]{ filter:drop-shadow(0 6px 16px rgba(0,0,0,.45)) brightness(1.2); }
 </style>
 </head>
 <body>
@@ -181,15 +141,14 @@
   <div class="pre-banner" id="preBannerText">🕯️ EL SORTEO VA A COMENZAR 🕯️<small>Prepárate…</small></div>
 </div>
 
-<!-- FANFARRIA 1–2 -->
+<!-- FANFARRIA -->
 <div id="celebrate" class="celebrate" aria-hidden="true">
   <div class="banner" id="bannerText">🎺 ¡PREMIO! 🎉<small>Sonrisa Médica</small></div>
-  <!-- Logos en el banner -->
   <img class="logo left"  src="patro2.svg" alt="Patrocinador 1">
   <img class="logo right" src="patro1.png" alt="Patrocinador 2">
 </div>
 
-<!-- Audios HTML -->
+<!-- Audios -->
 <audio id="intro" src="intro_terror.mp3" preload="auto"></audio>
 <audio id="sfx1"  src="fanfarria1.mp3" preload="auto"></audio>
 <audio id="sfx2"  src="fanfarria2.mp3" preload="auto"></audio>
@@ -200,7 +159,7 @@
     <div class="sub">Introduce las papeletas vendidas y deja que el miedo haga su trabajo…</div>
 
     <div class="toolbar">
-      <input id="inpNums" type="text" placeholder="Pega números o rangos (p.ej. 00000-00200 o 1,2,5-10)" />
+      <input id="inpNums" type="text" aria-label="Números o rangos a añadir" />
       <button class="btn" id="btnAdd">Añadir</button>
       <button class="btn" id="btnExport">Exportar</button>
       <span style="color:#7d8798;font-size:12px;margin:0 4px">Intervalo (s)</span>
@@ -211,7 +170,6 @@
       <button class="btn" id="btnReset">Reiniciar</button>
     </div>
 
-    <!-- Franja de patrocinadores -->
     <div class="sponsors">
       <img src="patro2.svg" alt="Patrocinador 1">
       <img src="patro1.png" alt="Patrocinador 2">
@@ -219,7 +177,6 @@
   </header>
 
   <section class="grid" id="grid"></section>
-  <footer>Los números de PAPELETA se revelan en orden de PREMIO (1→25). Sin repeticiones. 🎃</footer>
 </div>
 
 <script>
@@ -242,7 +199,7 @@
   const zpad=(n,w)=>String(n).padStart(w,"0");
   const niceInt=s=>{const v=parseInt(String(s).trim(),10);return Number.isFinite(v)?v:null;}
 
-  // Audios
+  // Audios base
   const intro = document.getElementById('intro');
   const sfx1  = document.getElementById('sfx1');
   const sfx2  = document.getElementById('sfx2');
@@ -266,7 +223,7 @@
   }
   createPrizeAudios();
 
-  // Desbloqueo general de audio con gesto del usuario
+  // Desbloqueo de audio tras gesto del usuario
   async function primeAudio(){
     const allEls = [intro,sfx1,sfx2, ...Object.values(prizeAudio), fallbackAudio].filter(Boolean);
     for(const a of allEls){
@@ -313,8 +270,7 @@
   async function playHTML(el, vol=1){
     try{
       if(!state.audioReady) await primeAudio();
-      el.currentTime=0; el.volume=vol;
-      await el.play();
+      el.currentTime=0; el.volume=vol; await el.play();
     }catch(e){ console.warn('HTML audio bloqueado', e); }
   }
 
@@ -329,9 +285,7 @@
 
   // Banner fanfarria (1 y 2) mostrando también la papeleta
   function showFanfare(premioNumero, papeletaNumero){
-    const papStr = typeof papeletaNumero==='number'
-      ? `PAPELETA ${zpad(papeletaNumero, state.padWidth)}`
-      : '';
+    const papStr = typeof papeletaNumero==='number' ? `PAPELETA ${zpad(papeletaNumero, state.padWidth)}` : '';
     bannerText.innerHTML = `🎺 ¡PREMIO ${premioNumero}! 🎉<small>${papStr ? papStr + ' · ' : ''}Sonrisa Médica</small>`;
     celebrateEl.classList.add('show');
     spawnConfetti(premioNumero===1?180:160, CONFETTI_MS);
@@ -369,14 +323,11 @@
     grid.appendChild(c); cards[i]=c.querySelector(".big");
   }
 
-  /* === EFECTO ESCENARIO POR TARJETA === */
+  /* Efecto escenario en cada tarjeta */
   function revealStageEffect(cardNode){
-    const card = cardNode.closest('.card');
-    if(!card) return;
+    const card = cardNode.closest('.card'); if(!card) return;
     card.classList.add('stage-reveal','curtains','spot');
-    const spark = document.createElement('div');
-    spark.className = 'stage-spark';
-    card.appendChild(spark);
+    const spark = document.createElement('div'); spark.className = 'stage-spark'; card.appendChild(spark);
     setTimeout(()=>{ spark.remove(); }, 1300);
     setTimeout(()=>{ card.classList.remove('curtains','spot'); }, 1200);
     setTimeout(()=>{ card.classList.remove('stage-reveal'); }, 1600);
@@ -385,10 +336,8 @@
   function pintarCard(idx,n){
     const el=cards[idx]; if(!el)return;
     el.textContent=`PAPELETA ${zpad(n,state.padWidth)}`;
-    // toque visual
     el.parentElement.style.boxShadow="0 0 8px 2px #2a0d14 inset";
     setTimeout(()=>el.parentElement.style.boxShadow="0 6px 24px rgba(0,0,0,.35)",220);
-    // escenario
     revealStageEffect(el);
   }
 
@@ -403,10 +352,7 @@
     state.resultados.push([idx,n]);
     pintarCard(idx,n);
 
-    // Sonido por premio
     playPrizeSfx(idx);
-
-    // Banner con papeleta en 1 y 2
     if(idx===1 || idx===2){ showFanfare(idx, n); }
 
     if(state.resultados.length>=TOTAL_PREMIOS){stop();alert("Completado.");}
@@ -421,12 +367,10 @@
 
   async function startPreRoll(){
     state.prerollActive=true;
-    preBanner.innerHTML = `🕯️ EL SORTEO VA A COMENZAR 🕯️`;
+    preBanner.innerHTML = `🕯️ EL SORTEO VA A COMENZAR 🕯️<small>Prepárate…</small>`;
     prerollEl.classList.add('show');
-
     await primeAudio();
     playHTML(intro, 1.0);
-
     setTimeout(()=>{
       prerollEl.classList.remove('show');
       try{ intro.pause(); intro.currentTime=0; }catch(_){}
@@ -442,9 +386,7 @@
     try{ intro.pause(); intro.currentTime=0; }catch(_){}
     try{ sfx1.pause(); sfx1.currentTime=0; }catch(_){}
     try{ sfx2.pause(); sfx2.currentTime=0; }catch(_){}
-    for(const k in prizeAudio){
-      try{ prizeAudio[k].pause(); prizeAudio[k].currentTime=0; }catch(_){}
-    }
+    for(const k in prizeAudio){ try{ prizeAudio[k].pause(); prizeAudio[k].currentTime=0; }catch(_){} }
     try{ fallbackAudio && (fallbackAudio.pause(), fallbackAudio.currentTime=0); }catch(_){}
   }
 
@@ -502,3 +444,5 @@
 </script>
 </body>
 </html>
+
+
